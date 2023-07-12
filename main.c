@@ -60,6 +60,18 @@ void allAvailableProperties() {
 
 void displayAvailableProperties() {
     // Вивести доступні житла
+    printf("\n<=== AVAILABLE PROPERTIES ===>\n\n");
+    for (int i = 0; i < sizeof(availableProperties) / sizeof(availableProperties[0]); i++){
+        printf("Property %d\n", i + 1);
+        printf("Type: %s\n", availableProperties[i].type);
+        printf("Address: %s\n", availableProperties[i].address);
+        printf("City: %s\n", availableProperties[i].city);
+        printf("Floor: %d\n", availableProperties[i].floor);
+        printf("Rooms: %d\n", availableProperties[i].rooms);
+        printf("Area: %d\n", availableProperties[i].area);
+        printf("Price for month: %.2f\n", availableProperties[i].price);
+        printf("\n");
+    }
 }
 
 void searchProperty() {
