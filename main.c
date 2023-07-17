@@ -74,7 +74,41 @@ void createAccount() {
 }
 
 void login() {
-
+    char username[100];
+    char password[100];
+    printf("\nEnter your username: ");
+    scanf("%s", username);
+    if (strcmp(username, currentUser.username) != 0) {
+        printf("Invalid username.\n");
+    } 
+    else {
+        printf("Enter your password: ");
+        int i = 0;
+        while (1) {
+            password[i] = getch();
+            if(password[i] == 13) {
+                break;
+            }
+            else if (password[i] == 8){
+                if (i > 0){
+                    i--;
+                    printf("\b \b");
+                }
+            }
+            else {
+                printf("*");
+            }
+            i++;
+        }
+        password[i] = '\0';
+        printf("\n");
+        if (strcmp(password, currentUser.password) != 0) {
+            printf("Invalid password.\n");
+        }
+        else {
+            printf("Logged in as %s.\n", username);
+        }
+    }
 }
 
 void viewAccountInfo() {
