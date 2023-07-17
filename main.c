@@ -33,8 +33,8 @@ void displayMenu() {
     printf("3. View Account Info\n");
     printf("4. View Order History\n");
     printf("5. View Current Orders\n");
-    printf("6. Search Property\n");
-    printf("7. Display All Available Properties\n");
+    printf("6. Display All Available Properties\n");
+    printf("7. Search Property\n");
     printf("8. Rent Property\n");
     printf("9. Exit\n");
     printf("<================>\n");
@@ -67,7 +67,7 @@ void createAccount() {
     printf("Enter your email: ");
     scanf("%s", currentUser.email);
     printf("Enter your age: ");
-    scanf("%d", currentUser.age);
+    scanf("%d", &currentUser.age);
     printf("Enter your phone number: ");
     scanf("%s", currentUser.number);
     printf("\nAccount created successfully!\n");
@@ -111,12 +111,21 @@ void login() {
     }
 }
 
-void viewAccountInfo() {
-
+void viewAccountInfo(struct UserInfo currentUser) { 
+    printf("Username: %s\n", currentUser.username);
+    printf("Password: ");
+    for (int i = 0; i < strlen(currentUser.password); i++) {
+        printf("*");
+    }
+    printf("\nName: %s\n", currentUser.name);
+    printf("E-mail: %s\n", currentUser.email);
+    printf("Age: %d\n", currentUser.age);
+    printf("Phone number: %s\n", currentUser.number);
+    printf("<================>\n");
 }
 
 void viewOrderHistory() {
-
+  
 }
 
 void viewCurrentOrders() {
@@ -147,31 +156,30 @@ void allAvailableApartments() {
     setAvailableApartments(&availableApartments[++i], "Flat", "32 Zelena st.", "Lviv", 2, 59, 12350.0, 5);
 }
 
-void displayAvailableProperties() {
-    // Вивести доступні житла
-    printf("\n<=== AVAILABLE PROPERTIES ===>\n\n");
-    for (int i = 0; i < sizeof(availableProperties) / sizeof(availableProperties[0]); i++){
+void displayAvailableApartments() {
+    printf("\n<=== AVAILABLE APARTMENTS ===>\n\n");
+    for (int i = 0; i < sizeof(availableApartments) / sizeof(availableApartments[0]); i++){
         printf("Property %d\n", i + 1);
-        printf("Type: %s\n", availableProperties[i].type);
-        printf("Address: %s\n", availableProperties[i].address);
-        printf("City: %s\n", availableProperties[i].city);
-        printf("Floor: %d\n", availableProperties[i].floor);
-        printf("Rooms: %d\n", availableProperties[i].rooms);
-        printf("Area: %d\n", availableProperties[i].area);
-        printf("Price for month: %.2f\n", availableProperties[i].price);
+        printf("Type: %s\n", availableApartments[i].type);
+        printf("Address: %s\n", availableApartments[i].address);
+        printf("City: %s\n", availableApartments[i].city);
+        printf("Floor: %d\n", availableApartments[i].floor);
+        printf("Rooms: %d\n", availableApartments[i].rooms);
+        printf("Area: %d\n", availableApartments[i].area);
+        printf("Price for month: %.2f\n", availableApartments[i].price);
         printf("\n");
     }
 }
 
-void searchProperty() {
+void searchApartment() {
 
 }
 
-void viewPropertyDetails(struct Property availableProperties) {
+void viewApartmentDetails(struct ApartmentsInfo availableApartmentss) {
 
 }
 
-void rentProperty() {
+void rentApartment() {
 
 }
 
@@ -190,7 +198,7 @@ int main() {
                 login();
                 break;
             case 3:
-                viewAccountInfo();
+                viewAccountInfo(currentUser);
                 break;
             case 4:
                 viewOrderHistory();
