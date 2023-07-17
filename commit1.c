@@ -34,7 +34,11 @@ void displayMenu() {
     printf("<================>\n");
 }
 
-void login() { 
+void createAccount() {
+    // Створення акаунта
+}
+
+void login() {
     char username[100];
     char password[100];
     printf("\nEnter your username: ");
@@ -70,10 +74,6 @@ void login() {
             printf("Logged in as %s.\n", username);
         }
     }
-}
-
-void login() {
-    // Вхід у систему
 }
 
 void viewAccountInfo() {
