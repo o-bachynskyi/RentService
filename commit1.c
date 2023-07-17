@@ -42,8 +42,17 @@ void login() {
     // Вхід у систему
 }
 
-void viewAccountInfo() {
-    // Виведення інформації про акаунт
+void viewAccountInfo(struct UserInfo currentUser) { 
+    printf("Username: %s\n", currentUser.username);
+    printf("Password: ");
+    for (int i = 0; i < strlen(currentUser.password); i++) {
+        printf("*");
+    }
+    printf("\nName: %s\n", currentUser.name);
+    printf("E-mail: %s\n", currentUser.email);
+    printf("Age: %d\n", currentUser.age);
+    printf("Phone number: %s\n", currentUser.number);
+    printf("<================>\n");
 }
 
 void viewOrderHistory() {
