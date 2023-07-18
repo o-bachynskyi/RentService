@@ -35,6 +35,9 @@ struct UserInfo currentUser;
 struct Order orders[10];
 int totalOrders = 0;
 
+struct Order orderHistory[10];
+int totalOrderHistory = 0;
+
 void displayMenu() {
     printf("\n<===== MENU =====>\n");
     printf("1. Create Account\n");
