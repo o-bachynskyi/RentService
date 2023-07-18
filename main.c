@@ -133,7 +133,25 @@ void viewAccountInfo(struct UserInfo currentUser) {
 }
 
 void viewOrderHistory() {
-  
+    printf("\n<=== ORDER HISTORY ===>\n\n");
+    if (totalOrderHistory == 0) {
+        printf("No order history found.\n");
+        return;
+    }
+    for (int i = 0; i < totalOrderHistory; i++) {
+        printf("Order %d\n", i + 1);
+        printf("Type: %s\n", orderHistory[i].type);
+        printf("Address: %s\n", orderHistory[i].address);
+        printf("City: %s\n", orderHistory[i].city);
+        printf("Floor: %d\n", orderHistory[i].floor);
+        printf("Rooms: %d\n", orderHistory[i].rooms);
+        printf("Area: %d\n", orderHistory[i].area);
+        printf("Price for month: %.2f\n", orderHistory[i].price);
+        printf("Months for rent: %d\n", orderHistory[i].months);
+        float totalCost = orderHistory[i].price * orderHistory[i].months;
+        printf("Total cost for %d months: %.2f\n", orderHistory[i].months, totalCost);
+        printf("\n");
+    }
 }
 
 void changeMonths() {
