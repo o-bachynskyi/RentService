@@ -128,8 +128,103 @@ void viewOrderHistory() {
   
 }
 
-void viewCurrentOrders() {
+void changeMonths() {
+    printf("Enter order number to change months: ");
+    int orderNumber;
+    scanf("%d", &orderNumber);
+    if (orderNumber >= 1 && orderNumber <= totalOrders) {
+        int newMonths;
+        printf("Enter new duration of rent: ");
+        scanf("%d", &newMonths);
+        float totalCost = orders[orderNumber - 1].price * newMonths;
+        printf("\nTotal cost for %d months: %.2f\n", newMonths, totalCost);
+        char confirm;
+        printf("\nDo you want to confirm the change? (y/n): ");
+        scanf(" %c", &confirm);
+        if (confirm == 'y' || confirm == 'Y') {
+            orders[orderNumber - 1].months = newMonths;
+            printf("Rent duration changed.\n");
+        } 
+        else {
+            printf("Changes canceled.\n");
+        }
+    }    
+    else {
+        printf("Invalid order number.\n");
+    }
+}
 
+void cancelOrder() {
+    printf("Enter order number to cancel: ");
+    int cancelOrderNumber;
+    scanf("%d", &cancelOrderNumber);
+    if (cancelOrderNumber >= 1 && cancelOrderNumber <= totalOrders) {
+        orderHistory[totalOrderHistory] = orders[cancelOrderNumber - 1];
+        totalOrderHistory++;
+        for (int j = cancelOrderNumber - 1; j < totalOrders - 1; j++) {
+            orders[j] = orders[j + 1];
+        }
+        totalOrders--;
+        char confirm;
+        printf("\nDo you want to confirm the cancellation of the order? (y/n): ");
+        scanf(" %c", &confirm);
+
+        if (confirm == 'y' || confirm == 'Y') {
+            printf("Order canceled.\n");
+        } else {
+            orders[totalOrders] = orderHistory[totalOrderHistory - 1];
+            totalOrders++;
+            totalOrderHistory--;
+            printf("Going back to menu...\n");
+        }
+    } else {
+        printf("Invalid order number.\n");
+    }
+}
+
+void viewCurrentOrders() {
+    printf("\n<=== CURRENT ORDERS ===>\n\n");
+    if (totalOrders == 0) {
+        printf("No current orders found.\n");
+        return;
+    }
+    for (int i = 0; i < totalOrders; i++) {
+        printf("Order %d\n", i + 1);
+        printf("Type: %s\n", orders[i].type);
+        printf("Address: %s\n", orders[i].address);
+        printf("City: %s\n", orders[i].city);
+        printf("Floor: %d\n", orders[i].floor);
+        printf("Rooms: %d\n", orders[i].rooms);
+        printf("Area: %d\n", orders[i].area);
+        printf("Price for month: %.2f\n", orders[i].price);
+        printf("Months for rent: %d\n", orders[i].months);
+        float totalCost = orders[i].price * orders[i].months;
+        printf("Total cost for %d months: %.2f\n", orders[i].months, totalCost);
+        printf("\n");
+    }
+    printf("<==== ACTIONS ====>\n");
+    printf("1. Change months\n");
+    printf("2. Cancel order\n");
+    printf("3. Back to menu\n");
+    printf("<=================>\n");
+    printf("\nEnter your choice: ");
+    int choice;
+    scanf("%d", &choice);
+
+    switch (choice) {
+        case 1:
+            changeMonths();
+            break;
+        case 2:
+            cancelOrder();
+            break;
+        case 3:
+            printf("Going back to menu...\n");
+            break;
+        default:
+            printf("Invalid option.\n");
+            break;
+    }
 }
 
 setAvailableApartments(struct ApartmentsInfo *availableApartments, char *type, char *address, char *city, int rooms, int area, float price, int floor) {
