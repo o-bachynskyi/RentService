@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <conio.h>
 
 struct UserInfo {
     char username[100];
@@ -11,7 +12,12 @@ struct UserInfo {
 };
 
 struct Order {
-
+    char type[50];
+    char address[100];
+    char city[50];
+    int rooms, floor, area;
+    float price;
+    int months;
 };
 
 struct ApartmentsInfo {
@@ -26,6 +32,9 @@ struct ApartmentsInfo availableApartments[10];
 
 struct UserInfo currentUser;
 
+struct Order orders[10];
+int totalOrders = 0;
+
 void displayMenu() {
     printf("\n<===== MENU =====>\n");
     printf("1. Create Account\n");
@@ -33,10 +42,9 @@ void displayMenu() {
     printf("3. View Account Info\n");
     printf("4. View Order History\n");
     printf("5. View Current Orders\n");
-    printf("6. Display All Available Properties\n");
-    printf("7. Search Property\n");
-    printf("8. Rent Property\n");
-    printf("9. Exit\n");
+    printf("6. Display All Available Apartments\n");
+    printf("7. Search And Rent Apartment\n");
+    printf("8. Exit\n");
     printf("<================>\n");
 }
 
@@ -159,7 +167,7 @@ void allAvailableApartments() {
 void displayAvailableApartments() {
     printf("\n<=== AVAILABLE APARTMENTS ===>\n\n");
     for (int i = 0; i < sizeof(availableApartments) / sizeof(availableApartments[0]); i++){
-        printf("Property %d\n", i + 1);
+        printf("Apartment %d\n", i + 1);
         printf("Type: %s\n", availableApartments[i].type);
         printf("Address: %s\n", availableApartments[i].address);
         printf("City: %s\n", availableApartments[i].city);
@@ -171,16 +179,133 @@ void displayAvailableApartments() {
     }
 }
 
-void searchApartment() {
-
+int searchApartments(char searchCity[], char searchType[], struct ApartmentsInfo filteredApartments[]){
+    int foundApartments = 0;
+    for (int i = 0; i < sizeof(availableApartments) / sizeof(availableApartments[0]); i++) {
+        if (strcmp(availableApartments[i].city, searchCity) == 0 && strcmp(availableApartments[i].type, searchType) == 0) {
+            memcpy(&filteredApartments[foundApartments], &availableApartments[i], sizeof(struct ApartmentsInfo));
+            foundApartments++;
+        }
+    }
+    return foundApartments;
 }
 
-void viewApartmentDetails(struct ApartmentsInfo availableApartmentss) {
-
+void displaySearchResults(struct ApartmentsInfo filteredApartments[], int foundApartments) {
+    if (foundApartments == 0) {
+        printf("\nNo apartments found matching the search criteria.\n");
+        return;
+    }
+    for (int i = 0; i < foundApartments; i++) {
+        printf("\nApartment %d\n", i + 1);
+        printf("Type: %s\n", filteredApartments[i].type);
+        printf("Address: %s\n", filteredApartments[i].address);
+        printf("City: %s\n", filteredApartments[i].city);
+        printf("Floor: %d\n", filteredApartments[i].floor);
+        printf("Rooms: %d\n", filteredApartments[i].rooms);
+        printf("Area: %d\n", filteredApartments[i].area);
+        printf("Price for month: %.2f\n", filteredApartments[i].price);
+    }
 }
 
-void rentApartment() {
+void rentApartment(struct ApartmentsInfo filteredApartments[], int foundApartments) {
+    int selectedApartment;
+    printf("\nEnter the number of the apartment you want to rent (0 to go back): ");
+    scanf("%d", &selectedApartment);
+    if (selectedApartment < 0 || selectedApartment > foundApartments) {
+        printf("Invalid selection.\n");
+        return;
+    } else if (selectedApartment == 0) {
+        printf("Going back to menu.\n");
+        return;
+    }
+    int months;
+    printf("Enter the number of months for rent: ");
+    scanf("%d", &months);
+    float totalCost = filteredApartments[selectedApartment - 1].price * months;
+    printf("Total cost for %d months: %.2f\n", months, totalCost);
+    char confirm;
+    printf("\nDo you want to confirm the rental? (y/n): ");
+    scanf(" %c", &confirm);
+    
+    if (confirm == 'y' || confirm == 'Y') {
+        struct Order newOrder;
+        strcpy(newOrder.type, filteredApartments[selectedApartment - 1].type);
+        strcpy(newOrder.address, filteredApartments[selectedApartment - 1].address);
+        strcpy(newOrder.city, filteredApartments[selectedApartment - 1].city);
+        newOrder.floor = filteredApartments[selectedApartment - 1].floor;
+        newOrder.rooms = filteredApartments[selectedApartment - 1].rooms;
+        newOrder.area = filteredApartments[selectedApartment - 1].area;
+        newOrder.price = filteredApartments[selectedApartment - 1].price;
+        newOrder.months = months;
+        orders[totalOrders] = newOrder;
+        totalOrders++;
+        printf("\nRental confirmed.\n");
+    } else {
+        printf("\nRental canceled.\n");
+    }
+}
 
+void searchAndRentApartment() {
+    printf("\n<=== SEARCH APARTMENT ===>\n");
+    printf("\n<=== CITY ===>\n");
+    printf("1. Kyiv\n");
+    printf("2. Lviv\n");
+    printf("3. Odesa\n");
+    printf("4. Kharkiv\n");
+    printf("<============>\n");
+    printf("\nEnter your choice: ");
+    int cityChoice;
+    scanf("%d", &cityChoice);
+
+    char searchCity[50];
+    switch (cityChoice) {
+        case 1:
+            strcpy(searchCity, "Kyiv");
+            break;
+        case 2:
+            strcpy(searchCity, "Lviv");
+            break;
+        case 3:
+            strcpy(searchCity, "Odesa");
+            break;
+        case 4:
+            strcpy(searchCity, "Kharkiv");
+            break;
+        default:
+            printf("Invalid choice.\n");
+            return;
+    }
+
+    printf("\n<=== TYPE ===>\n");
+    printf("1. Flat\n");
+    printf("2. House\n");
+    printf("<============>\n");
+    printf("\nEnter your choice: ");
+    int typeChoice;
+    scanf("%d", &typeChoice);
+
+    char searchType[50];
+    switch (typeChoice) {
+        case 1:
+            strcpy(searchType, "Flat");
+            break;
+        case 2:
+            strcpy(searchType, "House");
+            break;
+        default:
+            printf("Invalid choice.\n");
+            return;
+    }
+
+    struct ApartmentsInfo filteredApartments[10];
+    
+    int foundApartments = searchApartments(searchCity, searchType, filteredApartments);
+    
+    displaySearchResults(filteredApartments, foundApartments);
+
+    if (foundApartments > 0) {
+        rentApartment(filteredApartments, foundApartments);
+    }
 }
 
 int main() {
@@ -210,18 +335,15 @@ int main() {
                 displayAvailableApartments();
                 break;
             case 7:
-                searchApartment();
+                searchAndRentApartment();
                 break;
             case 8:
-                rentApartment();
-                break;
-            case 9:
                 printf("Exiting the program...\n");
                 break;
             default:
                 printf("Invalid choice. Please try again.\n");
                 break;
         }
-    } while (choice != 9);
+    } while (choice != 8);
     return 0;
 }
